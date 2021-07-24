@@ -1,14 +1,25 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 
 @Controller('categories')
 export class CategoriesController {
   @Get()
-  getProducts(): any {
-    return `all categories`;
+  getAll(): any {
+    return {
+      message: `category list`,
+      payload: [],
+    };
   }
 
   @Get(':id')
-  getProduct(@Param('id') id: string): object {
-    return { id, name: 'fake', price: 100 };
+  getOne(@Param('id') id: string): object {
+    return {
+      message: 'category retrived',
+      payload: { id, name: 'fake', price: 100 },
+    };
+  }
+
+  @Post()
+  create(@Body() payload: object): object {
+    return { message: 'category created', payload };
   }
 }
