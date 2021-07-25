@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Delete,
+  Put,
+} from '@nestjs/common';
 
 @Controller('orders')
 export class OrdersController {
@@ -21,5 +29,15 @@ export class OrdersController {
   @Post()
   create(@Body() payload: object): object {
     return { message: 'order created', payload };
+  }
+
+  @Put(':id')
+  update(@Param('id') id: number, @Body() payload: object): object {
+    return { message: 'order updated', payload: { id, ...payload } };
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: number): object {
+    return { message: 'order deleted' };
   }
 }
