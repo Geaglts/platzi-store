@@ -9,40 +9,37 @@ import {
   Delete,
 } from '@nestjs/common';
 
+import { ProductsService } from '../../services/products.service';
+
 @Controller('products')
 export class ProductsController {
+  constructor(private productsService: ProductsService) {}
   @Get()
   getAll(
     @Query('limit') limit = 50,
     @Query('offset') offset = 0,
     @Query('brand') brand: string,
-  ): any {
-    return {
-      message: `limit=${limit}, offset=${offset}, brand=${brand}`,
-      payload: [],
-    };
+  ): object {
+    return this.productsService.find();
   }
 
   @Get(':id')
   getOne(@Param('id') id: string): object {
-    return {
-      message: 'product retrived',
-      payload: { id, name: 'fake', price: 100 },
-    };
+    return this.productsService.findOne(+id);
   }
 
   @Post()
-  create(@Body() payload: object): object {
-    return { message: 'product created', payload };
+  create(@Body() payload: any): object {
+    return this.productsService.create(payload);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() payload: object): object {
-    return { message: 'product updated', payload: { id, ...payload } };
+  update(@Param('id') id: string, @Body() payload: any): object {
+    return this.productsService.update(+id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number): object {
-    return { message: 'product deleted' };
+  delete(@Param('id') id: string): any {
+    return this.productsService.delete(+id);
   }
 }
