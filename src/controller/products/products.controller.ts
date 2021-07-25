@@ -11,6 +11,7 @@ import {
 
 import { ProductsService } from '../../services/products.service';
 import { ParseIntPipe } from 'src/common/parse-int.pipe';
+import { ParseParamPipe } from 'src/common/parse-param.pipe';
 
 @Controller('products')
 export class ProductsController {
@@ -25,7 +26,7 @@ export class ProductsController {
   }
 
   @Get(':id')
-  getOne(@Param('id', ParseIntPipe) id: number): object {
+  getOne(@Param('id', ParseParamPipe, ParseIntPipe) id: number): object {
     return this.productsService.findOne(id);
   }
 
@@ -35,12 +36,15 @@ export class ProductsController {
   }
 
   @Put(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() payload: any): object {
+  update(
+    @Param('id', ParseParamPipe, ParseIntPipe) id: number,
+    @Body() payload: any,
+  ): object {
     return this.productsService.update(id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number): any {
+  delete(@Param('id', ParseParamPipe, ParseIntPipe) id: number): any {
     return this.productsService.delete(id);
   }
 }
