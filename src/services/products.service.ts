@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateProductDto, UpdateProductDto } from 'src/dtos/products.dtos';
 
 import { Product } from '../entities/product.entity';
 
@@ -25,7 +26,7 @@ export class ProductsService {
     return this.products.find((item) => item.id === id);
   }
 
-  create(payload: any) {
+  create(payload: CreateProductDto) {
     const newProduct: Product = {
       id: this.products.length + 1,
       ...payload,
@@ -34,7 +35,7 @@ export class ProductsService {
     return newProduct;
   }
 
-  update(id: number, payload: any) {
+  update(id: number, payload: UpdateProductDto) {
     const item = this.findOne(id);
     if (!item) return null;
     const indexItem = this.products.findIndex((item) => item.id === id);
