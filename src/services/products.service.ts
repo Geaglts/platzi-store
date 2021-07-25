@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { ConnectableObservable } from 'rxjs';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { Product } from '../entities/product.entity';
 
@@ -21,7 +20,8 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    console.log(this.products.find((item) => item.id === id));
+    let product = this.products.find((item) => item.id === id);
+    if (!product) throw new NotFoundException(`Product #${id} not found`);
     return this.products.find((item) => item.id === id);
   }
 
@@ -43,8 +43,10 @@ export class ProductsService {
   }
 
   delete(id: number) {
+    let product = this.products.find((item) => item.id === id);
+    if (!product) throw new NotFoundException(`Product #${id} not found`);
     const updatedList = this.products.filter((item) => item.id !== id);
     this.products = updatedList;
-    return id;
+    return true;
   }
 }
