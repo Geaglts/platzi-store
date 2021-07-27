@@ -7,37 +7,40 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
+import { ParseIntPipe } from 'src/common/parse-int.pipe';
+import { ParseParamPipe } from 'src/common/parse-param.pipe';
+import { CreateCustomerDto, UpdateCustomerDto } from 'src/dtos/customers.dtos';
+import { CustomersService } from 'src/services/customers.service';
 
 @Controller('customers')
 export class CustomersController {
+  constructor(private customersService: CustomersService) {}
+
   @Get()
   getAll(): any {
-    return {
-      message: `costumer list`,
-      payload: [],
-    };
+    return this.customersService.find();
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string): object {
-    return {
-      message: 'costumer retrived',
-      payload: { id, name: 'fake', price: 100 },
-    };
+  getOne(@Param('id', ParseParamPipe, ParseIntPipe) id: number): object {
+    return this.customersService.findOne(id);
   }
 
   @Post()
-  create(@Body() payload: object): object {
-    return { message: 'costumer created', payload };
+  create(@Body() payload: CreateCustomerDto): object {
+    return this.customersService.create(payload);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() payload: object): object {
-    return { message: 'costumer updated', payload: { id, ...payload } };
+  update(
+    @Param('id', ParseParamPipe, ParseIntPipe) id: number,
+    @Body() payload: UpdateCustomerDto,
+  ): object {
+    return this.customersService.update(id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number): object {
-    return { message: 'costumer deleted' };
+  delete(@Param('id', ParseParamPipe, ParseIntPipe) id: number): boolean {
+    return this.customersService.delete(id);
   }
 }

@@ -17,7 +17,7 @@ export class CategoriesService {
 
   findOne(id: number) {
     let brand = this.categories.find((item) => item.id === id);
-    if (!brand) throw new NotFoundException(`Brand #${id} not found`);
+    if (!brand) throw new NotFoundException(`Category #${id} not found`);
     return this.categories.find((item) => item.id === id);
   }
 
@@ -40,7 +40,7 @@ export class CategoriesService {
 
   delete(id: number) {
     let category = this.categories.find((item) => item.id === id);
-    if (!category) throw new NotFoundException(`Brand #${id} not found`);
+    if (!category) throw new NotFoundException(`Category #${id} not found`);
     const updatedList = this.categories.filter((item) => item.id !== id);
     this.categories = updatedList;
     return true;
