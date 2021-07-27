@@ -8,6 +8,7 @@ export class BrandsService {
     {
       id: 1,
       name: 'nike',
+      image: '',
     },
   ];
 
