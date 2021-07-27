@@ -8,36 +8,40 @@ import {
   Delete,
 } from '@nestjs/common';
 
+import { BrandsService } from 'src/services/brands.service';
+import { ParseIntPipe } from 'src/common/parse-int.pipe';
+import { ParseParamPipe } from 'src/common/parse-param.pipe';
+import { CreateBrandDto, UpdateBrandDto } from 'src/dtos/brands.dtos';
+
 @Controller('brands')
 export class BrandsController {
+  constructor(private brandsService: BrandsService) {}
+
   @Get()
   getAll(): any {
-    return {
-      message: `brand list`,
-      payload: [],
-    };
+    return this.brandsService.find();
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string): object {
-    return {
-      message: 'brand retrived',
-      payload: { id, name: 'fake', price: 100 },
-    };
+  getOne(@Param('id', ParseParamPipe, ParseIntPipe) id: number): object {
+    return this.brandsService.findOne(id);
   }
 
   @Post()
-  create(@Body() payload: object): object {
-    return { message: 'brand created', payload };
+  create(@Body() payload: CreateBrandDto): object {
+    return this.brandsService.create(payload);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() payload: object): object {
-    return { message: 'brand updated', payload: { id, ...payload } };
+  update(
+    @Param('id', ParseParamPipe, ParseIntPipe) id: number,
+    @Body() payload: UpdateBrandDto,
+  ): object {
+    return this.brandsService.update(id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number): object {
-    return { message: 'brand deleted' };
+  delete(@Param('id', ParseParamPipe, ParseIntPipe) id: number): boolean {
+    return this.brandsService.delete(id);
   }
 }
